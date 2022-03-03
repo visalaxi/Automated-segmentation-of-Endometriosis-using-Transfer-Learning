@@ -1,0 +1,47 @@
+model.evaluate(x_val, y_val)
+from sklearn.metrics import accuracy_score
+print('Accuracy: %.3f' % accuracy_score(y_val, y_pred))
+input_shape = (512, 512, 3)
+
+model = unet_model(
+    input_shape,
+    num_classes=3,
+    filters=64,
+    dropout=0.2,
+    num_layers=4,
+    output_activation='sigmoid'
+)
+
+
+print(model.summary())
+plot_segm_history(history, metrics=['iou', 'val_iou'], losses=['loss', 'val_loss'])
+
+fig = plt.figure(figsize=(30, 30))
+
+rows =4
+columns = 3
+
+counter=1
+print(f"Plotting Rows{rows} Columns{columns}")
+for row_idx in range(1,rows):
+  fig.add_subplot(rows, columns, counter)   
+  # showing image
+  # print(counter)
+  plt.imshow(x_val[row_idx-1])
+  # plt.axis('off')
+  plt.title("Original")
+
+  fig.add_subplot(rows, columns, counter+1)   
+  # showing image
+  plt.imshow(y_val[row_idx-1])
+  # plt.axis('off')
+  plt.title("Masked")
+
+  fig.add_subplot(rows, columns, counter+2)   
+  # showing image
+  plt.imshow(y_pred[row_idx-1])
+  # plt.axis('off')
+  plt.title("Predicted")
+  counter += 3
+ 
+plt.show()
